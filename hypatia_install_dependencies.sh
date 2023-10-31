@@ -7,7 +7,7 @@ echo ""
 
 # General
 sudo apt-get update || exit 1
-
+sudo apt install screens
 # satgenpy
 echo "Installing dependencies for satgenpy..."
 pip install numpy astropy ephem networkx sgp4 geopy matplotlib statsmodels || exit 1
