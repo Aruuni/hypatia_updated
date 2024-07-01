@@ -17,7 +17,8 @@ FLOWS = 6
 RUNS = [1]
 PATH_CHANGE_BEFORE = 140
 PATH_CHANGE_AFTER = 184.5
-
+EXPERIMENT_START_TIME = 120
+EXPERIMENT_END_TIME = 200
 
 pd.set_option('display.max_rows', None)
 plt.rcParams['text.usetex'] = False
@@ -31,7 +32,7 @@ def plot_cwnd_data(data, fairness_data, filename):
              'ORANGE': '#FF9500'
              }
     formatter = FormatStrFormatter('%.2f')
-    fig, axes = plt.subplots(nrows=len(PROTOCOLS), ncols=2, figsize=(12, 6), sharex='col', sharey=False)
+    fig, axes = plt.subplots(nrows=len(PROTOCOLS), ncols=2, figsize=(18, 6), sharex=True, sharey=False)
 
     for i, protocol in enumerate(PROTOCOLS):
         ax = axes[i, 0]
@@ -41,6 +42,8 @@ def plot_cwnd_data(data, fairness_data, filename):
                     linewidth=1, label=protocol)
         if i == len(PROTOCOLS) - 1:
             ax.set(xlabel='time (s)')
+
+        ax.set(xlim=[EXPERIMENT_START_TIME,EXPERIMENT_END_TIME])
         ax.set(title=PROTOCOLS_PRINT[i])
         ax.set(ylabel='Goodput (mbps)')
         ax.yaxis.set_major_formatter(formatter)
@@ -54,7 +57,9 @@ def plot_cwnd_data(data, fairness_data, filename):
         ax.plot(fairness_data[protocol]['fairness_all_sharing'].index, fairness_data[protocol]['fairness_all_sharing'],
                 linewidth=1, color=COLOR['ORANGE'], label='Fairness combined')
         if i == len(PROTOCOLS) - 1:
-            ax.set(xlabel='time (s)')
+            ax.set(xlabel='Time (seconds)')
+
+        ax.set(xlim=[EXPERIMENT_START_TIME,EXPERIMENT_END_TIME])  
         ax.set(title=PROTOCOLS_PRINT[i])
         ax.set(ylabel='Jain\'s Fairness Index')
         ax.yaxis.set_major_formatter(formatter)
@@ -86,7 +91,7 @@ if __name__ == "__main__":
                     receiver_total.columns = ['Flowid', 'time', 'goodput']
                     receiver_total['time'] = receiver_total['time'].apply(lambda x: int(float(x)))
                     receiver_total['time'] = receiver_total['time'] / 1e9
-                    receiver_total = receiver_total[receiver_total['time'] >= 120]
+                    receiver_total = receiver_total[receiver_total['time'] >= EXPERIMENT_START_TIME]
                     receiver_total = receiver_total.drop_duplicates('time')
                     receiver_total = receiver_total.set_index('time')
                     receivers[n + 1].append(receiver_total)

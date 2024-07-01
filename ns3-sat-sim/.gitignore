@@ -1,6 +1,7 @@
 .idea
 *.pyc
 cmake-build-debug
+simulator*
 copy_simulator*
 coverage_report/
 test_results/
