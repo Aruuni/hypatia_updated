@@ -29,7 +29,7 @@ except (ImportError, SystemError):
   from run_list import *
 
 local_shell = exputil.LocalShell()
-max_num_processes = 20
+max_num_processes = 5
 
 # Check that no screen is running
 if local_shell.count_screens() != 0:
@@ -41,25 +41,25 @@ if local_shell.count_screens() != 0:
 
 commands_to_run = []
 
-# for run in get_tcp_run_list():
-#     logs_ns3_dir = "runs/" + run["name"] + "/logs_ns3"
-#     local_shell.remove_force_recursive(logs_ns3_dir)
-#     local_shell.make_full_dir(logs_ns3_dir)
-#     commands_to_run.append(
-#         "cd ../../../ns3-sat-sim/simulator; "
-#         "./ns3 run \"main_satnet.cc --run_dir=\"../../paper/ns3_experiments/a_b/runs/" + run["name"] + "\"\" "
-#         "2>&1 | tee '../../paper/ns3_experiments/a_b/" + logs_ns3_dir + "/console.txt'"
-#     )
-
-for run in get_pings_run_list():
+for run in get_tcp_run_list():
     logs_ns3_dir = "runs/" + run["name"] + "/logs_ns3"
     local_shell.remove_force_recursive(logs_ns3_dir)
     local_shell.make_full_dir(logs_ns3_dir)
     commands_to_run.append(
-        "cd ../../../ns3-sat-sim/simulator; " 
-        "./ns3 run \"main_satnet --run_dir=\"../../paper/ns3_experiments/a_b/runs/" + run["name"] + "\"\" "
+        "cd ../../../ns3-sat-sim/simulator; "
+        "./ns3 run \"main_satnet.cc --run_dir=\"../../paper/ns3_experiments/a_b/runs/" + run["name"] + "\"\" "
         "2>&1 | tee '../../paper/ns3_experiments/a_b/" + logs_ns3_dir + "/console.txt'"
     )
+
+# for run in get_pings_run_list():
+#     logs_ns3_dir = "runs/" + run["name"] + "/logs_ns3"
+#     local_shell.remove_force_recursive(logs_ns3_dir)
+#     local_shell.make_full_dir(logs_ns3_dir)
+#     commands_to_run.append(
+#         "cd ../../../ns3-sat-sim/simulator; " 
+#         "./ns3 run \"main_satnet --run_dir=\"../../paper/ns3_experiments/a_b/runs/" + run["name"] + "\"\" "
+#         "2>&1 | tee '../../paper/ns3_experiments/a_b/" + logs_ns3_dir + "/console.txt'"
+#     )
 
 # Run the commands
 print("Running commands (at most %d in parallel)..." % max_num_processes)

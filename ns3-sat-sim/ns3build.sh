@@ -1,6 +1,6 @@
 rm -rf simulator
 mkdir simulator
-git clone https://github.com/nsnam/ns-3-dev-git.git simulator || exit 1
+git clone -b ns-3.39 https://gitlab.com/nsnam/ns-3-dev simulator || exit 1
 cp -r src simulator
 cp -r contrib simulator
 cp -r scratch simulator

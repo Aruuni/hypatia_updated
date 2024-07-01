@@ -46,6 +46,8 @@ for run in get_tcp_run_list():
     local_shell.sed_replace_in_file_plain(run_dir + "/config_ns3.properties",
                                           "[SATELLITE-NETWORK]", str(run["satellite_network"]))
     local_shell.sed_replace_in_file_plain(run_dir + "/config_ns3.properties",
+                                          "[SIMULATION-SEED]", str(run["seed"]))
+    local_shell.sed_replace_in_file_plain(run_dir + "/config_ns3.properties",
                                           "[DYNAMIC-STATE]", str(run["dynamic_state"]))
     local_shell.sed_replace_in_file_plain(run_dir + "/config_ns3.properties",
                                           "[DYNAMIC-STATE-UPDATE-INTERVAL-NS]", str(run["dynamic_state_update_interval_ns"]))

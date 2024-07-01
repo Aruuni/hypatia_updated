@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # Core values
-dynamic_state_update_interval_ms = 100                          # 100 millisecond update interval
+dynamic_state_update_interval_ms = 1000                        # 100 millisecond update interval
 simulation_end_time_s = 200                                     # 200 seconds
 pingmesh_interval_ns = 1 * 1000 * 1000                          # A ping every 1ms
 enable_isl_utilization_tracking = True                          # Enable utilization tracking
@@ -41,30 +41,37 @@ dynamic_state = "dynamic_state_" + str(dynamic_state_update_interval_ms) + "ms_f
 # full_satellite_network_isls = "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls"
 # full_satellite_network_gs_relay = "kuiper_630_isls_none_ground_stations_paris_moscow_grid_algorithm_free_one_only_gs_relays"
 full_satellite_network_gs_relay = "starlink_550_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls"
-chosen_pairs = [
-    # ("kuiper_630_isls", 1174, 1229, "TcpNewReno", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1174, 1229, "TcpVegas", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1173, 1241, "TcpNewReno", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1173, 1241, "TcpVegas", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1170, 1252, "TcpNewReno", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1170, 1252, "TcpVegas", full_satellite_network_isls),
-    # ("kuiper_630_isls", 1180, 1177, "TcpNewReno", full_satellite_network_isls),
-    ("starlink_550_isls", 1668, 1593, "TcpBbr", full_satellite_network_gs_relay),
-]
+chosen_pairs = []
+# chosen_pairs = [
+#     # ("kuiper_630_isls", 1174, 1229, "TcpNewReno", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1174, 1229, "TcpVegas", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1173, 1241, "TcpNewReno", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1173, 1241, "TcpVegas", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1170, 1252, "TcpNewReno", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1170, 1252, "TcpVegas", full_satellite_network_isls),
+#     # ("kuiper_630_isls", 1180, 1177, "TcpNewReno", full_satellite_network_isls),
+#     ("starlink_550_isls", 1668, 1593, "TcpCubic", full_satellite_network_gs_relay, 1),
+# ]
+for i in range(1, 2):
+    chosen_pairs.append(["starlink_550_isls", 1668, 1593, "TcpCubic", full_satellite_network_gs_relay, i])
+    chosen_pairs.append(["starlink_550_isls", 1668, 1593, "TcpBbr", full_satellite_network_gs_relay, i])
+    chosen_pairs.append(["starlink_550_isls", 1668, 1593, "TcpBbr3", full_satellite_network_gs_relay, i])
 
 
+datarate = 50
 def get_tcp_run_list():
     run_list = []
     for p in chosen_pairs:
         run_list += [
             {
-                "name": p[0] + "_" + str(p[1]) + "_to_" + str(p[2]) + "_with_" + p[3] + "_at_10_Mbps",
+                "name": p[0] + "_" + str(p[1]) + "_to_" + str(p[2]) + "_with_" + p[3] + "_at_" + str(datarate) + "_Mbps_" + str(p[5]) + "_run",
+                "seed": p[5],   
                 "satellite_network": p[4],
                 "dynamic_state": dynamic_state,
                 "dynamic_state_update_interval_ns": dynamic_state_update_interval_ns,
                 "simulation_end_time_ns": simulation_end_time_ns,
-                "data_rate_megabit_per_s": 10.0,
-                "queue_size_pkt": 100,
+                "data_rate_megabit_per_s": datarate,
+                "queue_size_pkt": 2500,
                 "enable_isl_utilization_tracking": enable_isl_utilization_tracking,
                 "isl_utilization_tracking_interval_ns": isl_utilization_tracking_interval_ns,
                 "from_id": p[1],
@@ -72,7 +79,6 @@ def get_tcp_run_list():
                 "tcp_socket_type": p[3],
             },
         ]
-
     return run_list
 
 

@@ -99,8 +99,9 @@ void BasicSimulation::ReadConfig() {
     m_simulation_end_time_ns = parse_positive_int64(GetConfigParamOrFail("simulation_end_time_ns"));
 
     // Seed
-    m_simulation_seed = parse_positive_int64(GetConfigParamOrFail("simulation_seed"));
 
+    m_simulation_seed = parse_positive_int64(GetConfigParamOrFail("simulation_seed"));
+    std::cout << "  > Seed............. " << m_simulation_seed << std::endl;
 }
 
 void BasicSimulation::ConfigureSimulation() {
