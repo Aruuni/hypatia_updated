@@ -674,6 +674,8 @@ TcpBbr3::bbr_update_min_rtt(Ptr<TcpSocketState> tcb, const TcpRateOps::TcpRateSa
     if (rs.m_delivered > 0)
         m_idleRestart = false;
     
+
+
     if (rs.m_delivered > 0)
         m_idleRestart = false;
     
@@ -1265,22 +1267,6 @@ TcpBbr3::CongestionStateSet(Ptr<TcpSocketState> tcb, const TcpSocketState::TcpCo
     //     tcb->m_cWnd = tcb->m_bytesInFlight.Get() + std::max(tcb->m_lastAckedSackedBytes, tcb->m_segmentSize);
          //m_packetConservation = true;
     //}
-}
-
-void 
-TcpBbr3::bbr_inflight_hi_from_lost_skb(Ptr<TcpSocketState> tcb, const TcpRateOps::TcpRateSample& rs)
-{
-
-}
-
-
-
-void 
-TcpBbr3::bbr_note_loss(Ptr<TcpSocketState> tcb, uint32_t delivered)
-{
-    if (!m_lossInRound)  /* first loss in this round trip? */
-		m_lossRoundDelivered = delivered;  /* set round trip */
-	m_lossInRound = true;
 }
 
 void

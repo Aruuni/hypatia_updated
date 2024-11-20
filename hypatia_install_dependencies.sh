@@ -6,7 +6,7 @@ echo "Python version 3.7+ is required."
 echo ""
 
 # General
-sudo apt-get update || exit 1
+#sudo apt-get update || exit 1
 sudo apt install screen
 # satgenpy
 echo "Installing dependencies for satgenpy..."
